@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">TaskPlanner by Monika Serafińska</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="{{ path('task_index') }}">Tasks</a></li>
+                <li><a href="{{ path('task_day') }}">Task for today</a></li>
+                <li class="active"><a href="{{ path('category_index') }}">Categories</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{{ path('fos_user_profile_edit') }}"><span class="glyphicon glyphicon-user"></span> {{ user }}</a></li>
+                <li><a href="{{ path('fos_user_security_logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div clas="container">
+        <div class="col-md-6">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                        <tr>
+                            <td>{{ category.name }}</td>
+                            <td>
+
+                                <a href="{{ path('category_show', { 'id': category.id }) }}" class="btn btn-primary">show</a>
+
+                                <a href="{{ path('category_edit', { 'id': category.id }) }}" class="btn btn-primary">edit</a>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="col-md-6">
+                <table class="table">
+                    <tr>
+                        <td>
+                            <a href="{{ path('category_new') }}" class="btn btn-primary">Create a new category</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+    {% endblock %}

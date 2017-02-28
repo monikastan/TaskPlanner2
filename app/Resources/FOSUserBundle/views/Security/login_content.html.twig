@@ -1,0 +1,60 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% if error %}
+    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+
+<!-- LOGIN FORM -->
+<nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">TaskPlanner by Monika Serafińska</a>
+            </div>
+            
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+                {#<li><a href="{{ path('category_index') }}">Categories</a></li>
+                <li><a href="#">Page 3</a></li>#}
+            </ul>{#
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{{ path('fos_user_profile_edit') }}"><span class="glyphicon glyphicon-user"></span> No loged user</a></li>
+                {#<li><a href="{{ path('fos_user_security_logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>#}
+            </ul>
+            #}
+        </div>
+    </nav>
+<div class="col-md-2 col-md-offset-5">
+    <div class="logo" align="center"><h3>Login</h3></div>
+    <!-- Main Form -->
+    <div class="login-form-1">
+        <form id="login-form" class="text-left" action="{{ path("fos_user_security_check") }}" method="post">
+            {% if csrf_token %}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+            {% endif %}
+            <div class="login-form-main-message"></div>
+            <div class="main-login-form">
+                <div class="login-group">
+                    <div class="form-group">
+                        <label for="username">{{ 'Username'|trans }}</label>
+                        <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" required="required" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">{{ 'Password'|trans }}</label>
+                        <input type="password" class="form-control" id="password" name="_password" required="required" />
+                    </div>
+                    <div class="form-group login-group-checkbox">
+                        <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                        <label for="remember_me">{{ 'Remember me'|trans }}</label>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary" id="_submit" name="_submit" value="{{ 'Log in'|trans }}" />
+            </div>
+            <div class="etc-login-form">
+                <br>
+                <p>forgot your password? <a href="#">click here</a></p>
+                <p>new user? <a href="#">create new account</a></p>
+            </div>
+        </form>
+    </div>
+    <!-- end:Main Form -->
+</div>

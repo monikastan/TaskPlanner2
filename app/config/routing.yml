@@ -1,0 +1,9 @@
+task:
+    resource: "@TaskBundle/Controller/"
+    type:     annotation
+    prefix:   /
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+logout:
+    path: /logout
+

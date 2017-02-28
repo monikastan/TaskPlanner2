@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col-md-4 col-md-offset-4">
+        <h1>Category edit</h1>
+
+        {{ form_start(edit_form) }}
+        {{ form_widget(edit_form) }}
+        <table class="table">
+            <tr>
+                <td>
+                    <input type="submit" value="Save" class="btn btn-primary"/>
+                    {{ form_end(edit_form) }}
+                </td>
+                <td>
+                    {{ form_start(delete_form) }}
+                    <input type="submit" value="Delete" class="btn btn-primary">
+                    {{ form_end(delete_form) }}
+                </td>
+                <td>
+                    <a href="{{ path('category_index') }}" class="btn btn-primary">Back to the list</a>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+{% endblock %}

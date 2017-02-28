@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>Task</h1>
+        <div class="col-md-6">
+            {% if message is defined %}
+                <p class="bg-info">{{ message }}</p>
+            {% endif %}
+
+            <table class="table">
+                <tbody>
+
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ task.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ task.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <td>{% if task.date %}{{ task.date|date('Y-m-d') }}{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th>Deadline</th>
+                        <td>{% if task.deadline %}{{ task.deadline|date('Y-m-d') }}{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th>Priority</th>
+                        <td>{{ task.priority.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>{{ task.status.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Attach</th>
+                        <td>{{ task.attach }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <tr>
+                    {% if message is not defined %}
+                        <td>
+                            <a href="{{ path('task_edit', { 'id': task.id }) }}" class="btn btn-primary">Edit</a>
+                        </td>
+                    {% endif%}
+                    <td>
+                        {{ form_start(delete_form) }}
+                        <input type="submit" value="Delete" class="btn btn-primary">
+                        {{ form_end(delete_form) }}
+                    </td>
+                    <td>
+                        <a href="{{ path('task_index') }}" class="btn btn-primary">Back to the list</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6 col-md-offset-3">
+        <h1>Comments:</h1>
+        <table class="table">
+            {% if comments is not empty %}
+                <p>Number of comments: {{ comments|length }}</p>
+                <tbody>
+                    <tr class="active">
+                        <th>Comment</th>
+                        <th>Date</th>
+                    </tr>
+                    {% for comment in comments %}
+                        <tr class="warning">
+                            <td> {{ comment.text }}</td>
+                            <td> {{ comment.date|date('Y-m-d') }}</td>
+                        </tr>
+                    {% endfor %}
+                <table class="table">
+                    <tr>
+                        <td>
+                            <a href="{{ path('comment_new', { 'id': task.id }) }}" class="btn btn-primary">Add comment</a>
+                        </td>
+                    </tr>
+                </table>
+                </tbody>
+            {% else %}
+                There are no comments for this task.
+            {% endif %}
+        </table>
+    </div>
+{% endblock %}
