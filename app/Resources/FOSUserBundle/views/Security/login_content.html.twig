@@ -12,6 +12,7 @@
             </div>
             
             <ul class="nav navbar-nav">
+                <li><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
                 <li class="active"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
                 {#<li><a href="{{ path('category_index') }}">Categories</a></li>
                 <li><a href="#">Page 3</a></li>#}
@@ -51,8 +52,8 @@
             </div>
             <div class="etc-login-form">
                 <br>
-                <p>forgot your password? <a href="#">click here</a></p>
-                <p>new user? <a href="#">create new account</a></p>
+                <p>forgot your password? <a href="{{ path('fos_user_resetting_request') }}">click here</a></p>
+                <p>new user? <a href="{{ path('fos_user_registration_register') }}">create new account</a></p>
             </div>
         </form>
     </div>

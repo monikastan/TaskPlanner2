@@ -1,0 +1,551 @@
+packagist.org - repozytorium pakietów PHPa
+spof - single point of failer
+dla każdego projektu instaluję Symfony
+w katalogu vendor nic nigdy nie zmieniać, nie wrzucamy tego katalogu na github'a - jeżeli ktoś zobaczy katalog vendor i pliki jakie moze zakomitować, 
+to może pomyśleć że wolno coś w tym katalogu zmieniać, grzebać i wypchnie to na githuba to mamy zmiany w vendor
+jaml = .yml format zapisu danych
+konsola w symfony - chodzi o command line'a
+
+slajd 15
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2$ sudo curl -LsS http://symfony.com/installer -o /usr/local/bin/symfony - dzięki tej lokalizacji 
+ten generator/installer bedzie dostępny globalnie
+powyższe sciąga instalator Symfony
+
+teraz zmieniam dostępy:
+sudo chmod a+x /usr/local/bin/symfony - nadaje prawa x - execution dla a - all
+
+***************************************************************************************************************************************************
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2$ ls /usr/local/bin/symfony
+/usr/local/bin/symfony
+
+
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2$ ls /usr/local/bin/
+composer  symfony -> ls pokazuje co jest pod zadaną okalizacją -> symfony wrzuciiśmy pod ten adres dzisiaj composera globalnie wcześniej
+
+
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2$ ls -la /usr/local/bin/
+total 1908
+drwxr-xr-x  2 root root    4096 Nov 26 16:25 .
+drwxr-xr-x 11 root root    4096 Jul 23 11:42 ..
+-rwxr-xr-x  1 root root 1706886 Nov 26 16:25 composer
+-rwxr-xr-x  1 root root  234049 Jan  7 11:45 symfony
+powyższe pokazuje dostępy nadane za pomocą chmod
+
+***************************************************************************************************************************************************
+
+instalacja symfony:
+
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2$ symfony new project_1 2.8
+
+ Downloading Symfony...
+
+    5.3 MiB/5.3 MiB ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  100%
+
+ Preparing project...
+
+ ✔  Symfony 2.8.15 was successfully installed. Now you can:
+
+    * Change your current directory to /home/daniel/Workspace/WAR_PHP_W_04_Symfony_2/project_1
+
+    * Configure your application in app/config/parameters.yml file.
+
+    * Run your application:
+        1. Execute the php app/console server:start command.
+        2. Browse to the http://localhost:8000 URL.
+
+    * Read the documentation at http://symfony.com/doc
+
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2/project_1$ php app/console server:start 0.0.0.0:8080
+
+                                                                                                                        
+ [OK] Web server listening on http://0.0.0.0:8080                                                                       
+
+ten adres http://0.0.0.0:8080 to adres na którym mam nasz framework, moge go wpisać w przeglądarce i będę na stronie głównej, domyślnej, która wyleciała
+z Symfony, na dole jest pasek, klikam na 200
+
+iurl:app_dev.php - wyszukać w googlu - wyświetli stronki gdzie nie skasowali tego na produkcji i widać dane z jakiej wersji PHP korzystają itp
+
+
+poczytać o kodach błędów
+
+wyłączenie serwera: Apache działa na innym Porcie domyślnie 80
+
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2/project_1$ php app/console server:stop 0.0.0.0:8080
+
+                                                                                                                        
+ [OK] Stopped the web server listening on http://0.0.0.0:8080 
+
+zawsze kiedy odpalamy dewelopersko project Symfony, to startujemy server, chyba ze podepniemy się pod Apache.
+
+
+doczytać: serwer w rozumieniu software
+
+kiedy wejde do src/AppBundle/controler/defaultcontroller.php -> to jest kontroller, publiczne metody muszą kończyć się słowem Action -> pozniej usunelismy
+AppBundle
+
+use służą do zaimportowania klas
+
+    /**
+     * @Route("/", name="homepage")
+     */
+
+adnotacja -> zapis konfiguracyjny, oznacza że jeżeli ktoś w aplikacji wywoła slesha to przekieruje mnie do strony głównej
+
+jeżeli zamienie na :
+    /**
+     * @Route("/foo", name="homepage")
+     */
+
+to musze wpisać nowy adres:
+http://0.0.0.0:8080/foo
+
+bo pod http://0.0.0.0:8080  już strony nie znajdę -> błąd 404
+
+złożoność cyklometryczna - ilość zapętleń w pętlach ify w ifach itp
+
+**************************************************************************************************************************************************
+
+zadnie 2. tworzenie BUNDLE
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2/project_1$ php app/console generate:bundle
+i generator
+
+  Welcome to the Symfony bundle generator!  
+                                            
+
+Are you planning on sharing this bundle across multiple applications? [no]: 
+
+Your application code must be written in bundles. This command helps
+you generate them easily.
+
+Give your bundle a descriptive name, like BlogBundle.
+Bundle name: CodersLabBundle
+
+Bundles are usually generated into the src/ directory. Unless you're
+doing something custom, hit enter to keep this default!
+
+Target Directory [src/]: 
+
+What format do you want to use for your generated configuration?
+
+Configuration format (annotation, yml, xml, php) [annotation]: 
+
+                     
+  Bundle generation  
+                     
+
+> Generating a sample bundle skeleton into app/../src/CodersLabBundle
+  created ./app/../src/CodersLabBundle/
+  created ./app/../src/CodersLabBundle/CodersLabBundle.php
+  created ./app/../src/CodersLabBundle/Controller/
+  created ./app/../src/CodersLabBundle/Controller/DefaultController.php
+  created ./app/../tests/CodersLabBundle/Controller/
+  created ./app/../tests/CodersLabBundle/Controller/DefaultControllerTest.php
+  created ./app/../src/CodersLabBundle/Resources/views/Default/
+  created ./app/../src/CodersLabBundle/Resources/views/Default/index.html.twig
+  created ./app/../src/CodersLabBundle/Resources/config/
+  created ./app/../src/CodersLabBundle/Resources/config/services.yml
+> Checking that the bundle is autoloaded
+> Enabling the bundle inside app/AppKernel.php
+  updated ./app/AppKernel.php
+> Importing the bundle's routes from the app/config/routing.yml file
+  updated ./app/config/routing.yml
+> Importing the bundle's services.yml from the app/config/config.yml file
+  updated ./app/config/config.yml
+
+                                         
+  Everything is OK! Now get to work :).  
+
+
+istotne, że > Enabling the bundle inside app/AppKernel.php
+
+teraz w src mamy CodersLabBundle -> Controller/DefaultController
+
+w /app/AppKernel.php mamy napisane jakie mamy Bundle mamy teraz też:  new CodersLabBundle\CodersLabBundle(),
+
+w /app/config/routing.yml:
+coders_lab:
+    resource: "@CodersLabBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+teraz pod adresem http://0.0.0.0:8080  mamy Hello World! w DefaultController.php mamy
+    /**
+     * @Route("/")
+     */
+
+mamy 2 Bundle, każdy ma klase DefaultController.php są w innych NameSpace'ach
+
+adress / w kontrolerze przekieruje na  http://0.0.0.0:8080
+
+a z /foo na http://0.0.0.0:8080/foo
+
+HelloWorld! chodzi z pliku CodersLabBundle/Resources/views/Default/index.html.twig
+
+
+bundle w CodersLab a w nim kontroler kieruje do pliku z Hello WOrld! -> return $this->render('CodersLabBundle:Default:index.html.twig');
+
+w AppBundle mamy folder Tests a w CodersLabBundle nie
+
+czyli http://0.0.0.0:8080 kieruje nas do Bundla CodersLabBundle a ten do strony z Hello World!
+
+
+**************************************************************************************************************************************************
+
+zadanie 3 usuwanie Bundli:
+
+w app/config/routing.yml zostawiamy tylko:
+
+coders_lab:
+    resource: "@CodersLabBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+teraz w AppKernel.php usuwam:
+            new AppBundle\AppBundle(),
+            
+            new TestBundle\TestBundle(),
+            new TestingBundle\TestingBundle(),
+
+usuwamy katalogi
+
++ usuwam w app/config/config.yml:
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+    - { resource: "@CodersLabBundle/Resources/config/services.yml" }
+    - { resource: "@TestBundle/Resources/config/services.yml" }
+    - { resource: "@TestingBundle/Resources/config/services.xml" }
+
+usuwam 2 ostatnie wiersze, Bundle AppBundle nie miał tutaj lini swojej
+
+ 
+*******************************************************************************************************************************************************
+*******************************************************************************************************************************************************
+
+Kontrolery -> odbierają request, przekształcają i odsyłają odpowiedź, np html
+
+przy generowaniu kontrolera jego nazwe poprzedzam nazwą bundla a kontroler sam domyślnie zapisze się w folderze Controller
+
+class DefaultController extends Controller - Controller to 
+
+response - dla użytkowników zwracamy html'a
+a dla aplikacji - xml'a
+
+
+use używamy jeżeli chcemy coś zaimportować z innego katlogu/namesace
+
+zadanie dzień 1 A
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2/2_Kontrolery_i_routing$ symfony new project_controller 2.8
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2/2_Kontrolery_i_routing/project_controller$
+ 
+*******************************************************************************************************************************************************
+*******************************************************************************************************************************************************
+
+2_Kontrolery_i_routing
+
+A1
+tworze bundla 
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2/2_Kontrolery_i_routing/project_controller$ php app/console generate:bundle
+usuwam w config/routing.yml
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+w AppKernel usuwam
+          new AppBundle\AppBundle(),
+
+w config.yml nic nie było dotyczącego AppBundle'a
+
+na koniec usuwam katalog AppBundle w katalogu src
+
+odpalamy serwer:
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2/2_Kontrolery_i_routing/project_controller$ php app/console server:start 0.0.0.0:8080
+
+                                                                                                                        
+ [OK] Web server listening on http://0.0.0.0:8080     
+
+
+A2. zakładamy kontroller:
+
+daniel@daniel-K75VJ:~/Workspace/WAR_PHP_W_04_Symfony_2/2_Kontrolery_i_routing/project_controller$ php app/console generate:controller
+
+                                               
+  Welcome to the Symfony controller generator  
+                                               
+
+
+Every page, and even sections of a page, are rendered by a controller.
+This command helps you generate them easily.
+
+First, you need to give the controller name you want to generate.
+You must use the shortcut notation like AcmeBlogBundle:Post
+
+Controller name: CodersLabBundle
+ The controller name must contain a : ("CodersLabBundle" given, expecting something like AcmeBlogBundle:Post) 
+Controller name: CodersLabBundle:First
+
+Determine the format to use for the routing.
+
+Routing format (php, xml, yml, annotation) [annotation]: 
+
+Determine the format to use for templating.
+
+Template format (twig, php) [twig]: 
+
+Instead of starting with a blank controller, you can add some actions now. An action
+is a PHP function or method that executes, for example, when a given route is matched.
+Actions should be suffixed by Action.
+
+
+New action name (press <return> to stop adding actions): 
+
+                             
+  Summary before generation  
+                             
+
+You are going to generate a "CodersLabBundle:First" controller
+using the "annotation" format for the routing and the "twig" format
+for templating
+Do you confirm generation [yes]? 
+
+                         
+  Controller generation  
+                         
+
+  created ./src/CodersLabBundle/Controller/FirstController.php
+  created ./src/CodersLabBundle/Tests/Controller/
+  created ./src/CodersLabBundle/Tests/Controller/FirstControllerTest.php
+Generating the bundle code: OK
+
+                                         
+  Everything is OK! Now get to work :).  
+                                         
+*******************************************************************************************************************************************************
+
+    public function helloWorldAction(){
+        
+    } nie wymaga use
+
+use  Symfony\Component\HttpFoundation\Response - musze dodać sam
+działam teraz na pliku FirstController.php
+
+teraz pod adresem http://0.0.0.0:8080/helloWorld/
+
+pod adresem powyższym ma się uruchomić kontroler
+kontroler jest workiem na akcje
+
+akcja jest implementowana jako metoda w jakimś kontrolerze
+
+slajd 26
+* @Route("/users/{id}")
+* @Method({"GET","POST"}) -> obsłuży parametry wysłane metodą GET oraz przez formularz
+
+slajd 27 - można napisać 2 osobne akcje
+
+wiedzieć jak działją metody GET, POST, DELETE to jest "must have"
+
+slajd 28 -> dzięki takiemu podejściu ograniczam ilość zmian, jeżeli bede chciał zmienić user na users to zmienie tylko jeden adres w jednym miejscu
+
+*******************************************************************************************************************************************************
+Cześć B1
+teraz po wpisaniu w przeglądarke http://0.0.0.0:8080/goodbye/Rambo  wyświetli się Goodbye Rambo
+
+część B2 
+http://0.0.0.0:8080/welcome/John/Rambo
+
+B3
+ad B4 kiedy wpisuje adres http://0.0.0.0:8080/form łapie sie na method get, a kiedy klikne  submit to  łapie sie na metodę Post
+
+w zadaniach B1-B4 framework zwracał nam obiekty typu HTML
+
+we frameworkach nie odnosimy się bezpośrednio do tablic superglobalnych, większość frameworków wystawi nam obiekty w symfony jest to obiekt klasy Request
+musimy dokleić use Symfony\Component\HttpFoundation\Request;
+
+bezstanowy url? coś bez przekazania danych w sesji/getem czy postem
+
+slajd 43 wczytywanie serwisów:
+
+każdy programista powinien na wyrywki znać kody przekierowania 301, 301 itp
+
+zahardkodować - zapisać na sztywno? wtf?
+
+link względny - nie zawier dresu domeny
+
+jeżeli otworzymy przeglądarke inkognito - nie będzie pamietać sesji
+
+
+
+
+
+Widoki i Twigi
+slajd 8 - 'name' => $name - tablica parametrów
+slajd 9 - tablica z danymi może być pusta
+
+slajd 14 - @Template("SensioBlogBundle:Post:show.html.twig") - nazwa Bundla-nazwa kontrolera - nazwa pliku -> adres w Symfoni
+
+
+jeżeli coś używa naszego kodu = framework, jeżeli my używamy czyjegoś kodu jest to biblioteka
+
+modelem w twiterze były wszystkie klasy i ich metody -> pisaliśmy je we wzorcu projektowym Active Record
+
+Modele nie muszą być osadzone w bazie danych
+
+koszyk, najprościej trzymać w sesji, ale lepiej trzymać go w bazie danych, bo widzimy co klient chciał kupić i mu sie przypomnieć np. po tygodniu
+
+Model w jakiś sposób przetrzymuje nam informacje, w sesji w ciasteczku lub w bazie danych
+
+
+*******************************************************************************************************************************************************
+
+twig - język programowania kompilowany do PHP, jest to skomplikowany proces, silna separacja języków pmiędzy PHPem a językiem który wyświetla nam dane
+
+druga funkcjonalność twiga, dziedziczenie i bloki, twig okiełzna widoki
+
+ORM - object relation mapper
+
+Doctrine - biblioteka, zupełnie osobny projekt od Symfony, możemy korzystać z niej pisząc w czystym PHP, nie jest częścią Symfony
+
+Doctrine to ORM: DBAL - warstwa abstrakcji napisana na PDO (alternatywa dla mysqli) - DQL - Doctrine Query Language -> tłumaczy się do SQL'a -> DBAL = 
+pełno klas służące do obsługi baz danych -> stosuje zasade obiektowości -> abstrakcję, jesteśmy poziom abstrakcji wyżej ponad naszą bazą danych, my mówimy tylko
+Doctrine żeby dogadała się z bazą danych, obojętnie jaką, mysql czy oraacle -> na tym polega abstrakcje
+
+my się będziemy zajmować warstwą ORM, która będzie nam mapowała to co sie dzieje w bazie danych na obiekty w naszej klasie
+
+będziemy tworzyli klasę i dodawać jej adnotację, a ona będzie sama tworzyć tabelki z bazą danych
+
+Migration - narzędzie do tworzenia migracji bazo-danowych, przeniesienie wersji bazy danych np kiedy dodaję użytkownika to trzeba wersję DB bez tabeli User
+zmigrować do wersji z tabelą User
+
+ODM - warstwa mapowania obiektów na bazy nie sql'owe
+
+jeżeli używamy ORM to spada nam niestety wydajność programu
+
+
+
+REST jest to schemat według którego budujemy API, nie trzyma stanu rozmowy, wysyłamy zapytanie serwer odpowiada nie wie komu, my nie wiemy jaki server nam odpowiedział
+
+w Szkole będziemy miei modele Class relacja 1 do wielu z klasą Pupils/uczniowie i model nauczyciel/teacher miedzy klasą a nauczycielem 1 do 1 (wychowawca)
+między teacher a student -> wiele do wielu
+
+json - forma zapisu danych, forma przesyłu danych
+
+
+drugi sposób renderowania to adnotacja @Template
+
+Jacek w C4/C5 używał include -> zobaczyć w jego plikach
+
+dziedziczenie szablonów:
+twig jest językiem, który kompiluje się do PHP
+extends - 
+block - 
+
+    /**
+     * @Route("/class/{id}")
+     * @Method("POST")
+     */
+    public function modifyClassAction(Request $req, $id) {
+        $classroomRepo = $this->getDoctrine()->getRepository("AppBundle:Classroom");
+
+        //do zapisywania potrzebujemy menagera
+
+        $em = $this->getDoctrine()->getManager();
+
+        $class = $classroomRepo->find($id);
+
+        if ($class != null) { //jeżeli wczytało / znalazło nam taką klasę
+            $class->setName($req->request->get("name"));
+            $em->flush(); //persist nie piszemy bo repozytorium samo powiadamia managera o...
+        }
+        return new JsonResponse($class);
+        /*
+          {"id":4,"name":"3B"}daniel@daniel-K75VJ:~/Workspace/SchoolProject$ curl -X POST -d "name=Nowa nazwa klasy trzeciej" http://localhost:8000/class/3
+          {"id":3,"name":"Nowa nazwa klasy trzeciej"}daniel@daniel-K75VJ:~/Workspace/SchoolProject$ -> zmieniło nazwę klasy
+
+         */
+    }
+
+w niedziele z Jazkiem przerobiliśmy SchoolProject z ApiRest na zwykłą
+
+Doctrine - wpisać association mapping
+przerobimy te ze slajdu 44, najczęściej używane jeden do wielu i wiele dowielu dwukierunkowa
+
+częśc jedna do wielu mapedBy
+część wiele do jednej inversedBy
+ArrayConstructor - obiekt, który działa jak tablica
+
+constructor będzie automatycznie dodany jeżeli wygenerujemy encję przez generator
+
+my mamy slassroom i pupils, jeden do wielu, dopisujemy controler do studenta Pupil i tworzymy 3 akcje dla niego
+
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:schema:update --dump-sql -> pokaże kod sql'a
+
+po każdej zmianie adnotacji:
+
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:generate:entities AppBundle/Entity -> analizuje czy dodawać/zmieniać funkcje wygenerowane przy tworzeniu Entity, po zmianie adnotacji
+Generating entities for namespace "AppBundle\Entity"
+  > backing up Pupil.php to Pupil.php~
+  > generating AppBundle\Entity\Pupil
+  > backing up Classroom.php to Classroom.php~
+  > generating AppBundle\Entity\Classroom
+  > backing up Teacher.php to Teacher.php~
+  > generating AppBundle\Entity\Teacher
+
+
+pliki z tyldą to pliki tymczasowe
+
+dodało nam funkcje w plikach Pupil.php (settery i gettery) i Classroom.php (constructor, addPupil, removePupil, getPupils)
+
+po dodaniu encji:
+1) walidacja
+2) robimy update
+3) doctrine:generate:entities -> sprawdza czy po zmianach nie potrzebujemy jeszcze jakichś funkcji i je w razie potrzeby dodaje
+
+zrobimy formuarz, taki że po wejściu na klasę dodamy możliwość dodawania uczniów
+/class/{id}/addPupil
+
+przy Doctrine nie wolno używać zwykłego var_dump(), ale dump() w twigu sobie poradzi
+
+w pupil reposytory piszemy 
+    public function getAllPupilsWithoutClass() {
+        
+    }
+
+generyczną funkcjonalnoość repozytorium możemy rozbudowywać o swoje metody
+
+na egzaminie trzeba będzie napisać formularz w twig'u, ale nie bedzie formularzy bedzie do stworzenia encja, kontrolery z akcjami któ©e muszą korzystać z twigów i będzie trzeba korzystać z encji
+
+
+robimy relacje wiele do wielu, nie ma znaczenia kto będzie trzymał relację, my robimy że Pupil bo ma inversedBy
+
+./app/console doctrine:schema:validate
+
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:schema:update
+ATTENTION: This operation should not be executed in a production environment.
+           Use the incremental update to detect changes during development and use
+           the SQL DDL provided to manually update your database in production.
+
+The Schema-Tool would execute "3" queries to update the database.
+Please run the operation by passing one - or both - of the following options:
+    doctrine:schema:update --force to execute the command
+    doctrine:schema:update --dump-sql to dump the SQL statements to the screen
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:schema:update --force
+Updating database schema...
+Database schema updated successfully! "3" queries were executed
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ 
+
+
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:generate:entities AppBundle/Entity
+Generating entities for namespace "AppBundle\Entity"
+  > backing up Pupil.php to Pupil.php~
+  > generating AppBundle\Entity\Pupil
+  > backing up Classroom.php to Classroom.php~
+  > generating AppBundle\Entity\Classroom
+  > backing up Teacher.php to Teacher.php~
+  > generating AppBundle\Entity\Teacher
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ 
+

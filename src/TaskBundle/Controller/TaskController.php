@@ -19,60 +19,7 @@ use TaskBundle\Entity\Status;
  */
 class TaskController extends Controller
 {
-    /**
-     * Lists all task entities.
-     *
-     * @Route("/search", name="task_search")
-     * @Method("POST")
-     */
-    public function searchTasksByAction(Request $request)
-    {
-
-        
-        /*
-        $repo = $this->getDoctrine()->getRepository('TaskBundle:Task');
-        
-        //wyszukuję zalogowanego użytkownika
-        $user = $this->container
-                ->get('security.context')
-                ->getToken()
-                ->getUser();
-        
-        if($user instanceof User) {
-            $tasks = $repo->findTaskByUser($user->getId());
-        } else {
-            $tasks = [];
-        }
-        
-        return $this->render('task/index.html.twig', array(
-            'tasks' => $tasks,
-        ));
-         * 
-         */
-                       
-//       
-//        $user = $this->container
-//                ->get('security.context')
-//                ->getToken()
-//                ->getUser();
-
-//        if ($form->isSubmitted() && $form->isValid() && $user instanceof User) {
-//            $em = $this->getDoctrine()->getManager();
-//            $date = new \DateTime();
-//            $task->setDate($date);
-//            $task->setUser($user);
-//            $em->persist($task);
-//            $em->flush($task);
-//
-//            return $this->redirectToRoute('task_show', array('id' => $task->getId()));
-//        }
-//
-//        return $this->render('task/index.html.twig', array(
-//            
-//            'searchForm' => $searchForm->createView(),
-//        ));
-        
-    }
+    
     /**
      * Lists all task entities.
      *
@@ -109,6 +56,7 @@ class TaskController extends Controller
           
             return $this->render('task/index.html.twig', array(
                 'tasks' => $tasks,
+                'user' => $user->getUserName(),
                 'searchForm' => $searchForm->createView()
             ));
         }
@@ -179,8 +127,11 @@ class TaskController extends Controller
             $em = $this->getDoctrine()->getManager();
             $date = new \DateTime();
             $task->setDate($date);
+            $file = $task->getAttach();
+            $fileName = $user->getId().'_'.date('Y-m-d').'.'.$file->guessExtension();//znajduje rozszerzenie dołączanego pliku
+            $file->move($this->getParameter('uploadedFiles'), $fileName);
+            $task->setAttach($fileName);
             $task->setUser($user);
-            $task->setStatus('expected');
             $em->persist($task);
             $em->flush($task);
 

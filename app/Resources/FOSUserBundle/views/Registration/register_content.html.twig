@@ -1,8 +1,61 @@
 {% trans_default_domain 'FOSUserBundle' %}
+<nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">TaskPlanner by Monika Serafińska</a>
+            </div>
+            
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
+                <li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+                {#<li><a href="#">Page 3</a></li>#}
+            </ul>{#
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{{ path('fos_user_profile_edit') }}"><span class="glyphicon glyphicon-user"></span> No loged user</a></li>
+                {#<li><a href="{{ path('fos_user_security_logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>#}
+            </ul>
+            #}
+        </div>
+    </nav>
 
-{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+
+{#{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
     {{ form_widget(form) }}
     <div>
         <input type="submit" value="{{ 'registration.submit'|trans }}" />
     </div>
 {{ form_end(form) }}
+#}
+
+<div class="col-md-4 col-md-offset-4", style="margin-top: 65px">
+    
+    <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST">
+
+        <h3>Registration form:</h3>
+
+        <div class="form-group">
+            {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder': 'Email'|trans } }) }}
+            {{ form_errors(form.email) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'placeholder': 'Username'|trans } }) }}
+            {{ form_errors(form.username) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control', 'placeholder': 'Password'|trans } }) }}
+            {{ form_errors(form.plainPassword.first) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control', 'placeholder': 'Confirm password'|trans } }) }}
+            {{ form_errors(form.plainPassword.second) }}
+        </div>
+
+        {{ form_rest(form) }}
+
+        
+            <input class="btn btn-primary" type="submit" value="{{ 'Register'|trans }}">
+        
+</div>

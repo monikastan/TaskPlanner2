@@ -7,6 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+
 
 class TaskType extends AbstractType
 {
@@ -29,7 +31,8 @@ class TaskType extends AbstractType
                         'data-date-format' => 'dd-mm-yyyy'
                         )
                     ))
-                ->add('attach')
+                ->add('attach', FileType::class, array('label' => 'Attachement', 'required' => false
+                        ))
                 ->add('priority', 'entity', array(
                     'class' => 'TaskBundle:Priority',
                     'choice_label' => 'name'
