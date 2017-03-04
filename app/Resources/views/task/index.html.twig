@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
+    <div class="col-md-12">
         <div class="row">
             <nav class="navbar navbar-inverse">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="#">TaskPlanner by Monika Serafińska</a>
+                        <a class="navbar-brand" href="{{ path('task_index') }}">TaskPlanner by Monika Serafińska</a>
                     </div>
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="{{ path('task_index') }}">All Tasks</a></li>
-                        <li><a href="{{ path('task_day') }}">Task for today</a></li>
+                        <li><a href="{{ path('task_day') }}">Tasks for today</a></li>
                         <li><a href="{{ path('category_index') }}">Categories</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -22,7 +22,7 @@
         </div>
 
 
-        <div class="">
+        <div class="container-fluid">
 
             <div class="row">
 

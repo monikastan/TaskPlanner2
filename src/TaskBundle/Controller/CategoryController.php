@@ -57,8 +57,13 @@ class CategoryController extends Controller
         $category = new Category();
         $form = $this->createForm('TaskBundle\Form\CategoryType', $category);
         $form->handleRequest($request);
+        
+        $user = $this->container
+                ->get('security.context')
+                ->getToken()
+                ->getUser();
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $user instanceof User) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($category);
             $em->flush($category);
@@ -68,10 +73,21 @@ class CategoryController extends Controller
 
         return $this->render('category/new.html.twig', array(
             'category' => $category,
+            'user' => $user->getUsername(),
             'form' => $form->createView(),
         ));
     }
-
+    
+    public function checkCategoryUser(Category $category){
+        $user = $this->container
+                ->get('security.context')
+                ->getToken()
+                ->getUser();
+                
+        if($category->getUser() != $user) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Access denied!');
+        }
+    }
     /**
      * Finds and displays a category entity.
      *
@@ -80,10 +96,18 @@ class CategoryController extends Controller
      */
     public function showAction(Category $category)
     {
+        $this->checkCategoryUser($category);//user moze przeglądac tylko swoje kategorie
+        
+        $user = $this->container //wczytuję usera na potrzebę przekierowania dowidoku i dodania go do widoku (w menu)
+                ->get('security.context')
+                ->getToken()
+                ->getUser();
+        
         $deleteForm = $this->createDeleteForm($category);
 
         return $this->render('category/show.html.twig', array(
             'category' => $category,
+            'user' => $user,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -96,6 +120,13 @@ class CategoryController extends Controller
      */
     public function editAction(Request $request, Category $category)
     {
+        $this->checkCategoryUser($category);//user moze przeglądac tylko swoje kategorie
+        
+        $user = $this->container //wczytuję usera na potrzebę przekierowania dowidoku i dodania go do widoku (w menu)
+                ->get('security.context')
+                ->getToken()
+                ->getUser();
+        
         $deleteForm = $this->createDeleteForm($category);
         $editForm = $this->createForm('TaskBundle\Form\CategoryType', $category);
         $editForm->handleRequest($request);
@@ -108,6 +139,7 @@ class CategoryController extends Controller
 
         return $this->render('category/edit.html.twig', array(
             'category' => $category,
+            'user' => $user,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));

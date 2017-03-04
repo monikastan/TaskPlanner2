@@ -140,6 +140,7 @@ class TaskController extends Controller
 
         return $this->render('task/new.html.twig', array(
             'task' => $task,
+            'user' => $user->getUsername(),
             'form' => $form->createView(),
         ));
     }
@@ -164,11 +165,17 @@ class TaskController extends Controller
         $this->checkTaskUser($task);//user moze przeglądac tylko swoje taski
         $deleteForm = $this->createDeleteForm($task);
         
+        $user = $this->container //wczytuję usera na potrzebę przekazania do wyświetlenia w twigu edit
+                ->get('security.context')
+                ->getToken()
+                ->getUser();
+        
         $commentRepo = $this->getDoctrine()->getRepository('TaskBundle:Comment');
         $commentToTask = $commentRepo->findCommentsByTaskId($task->getId());
 
         return $this->render('task/show.html.twig', array(
             'task' => $task,
+            'user' => $user->getUsername(),
             'comments' => $commentToTask,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -187,6 +194,11 @@ class TaskController extends Controller
         $taskRepo = $this->getDoctrine()->getRepository('TaskBundle:Task');
         $tasktoEdit = $taskRepo->find($id);
         
+        $user = $this->container //wczytuję usera na potrzebę przekazania do wyświetlenia w twigu edit
+                ->get('security.context')
+                ->getToken()
+                ->getUser();
+        
         if($tasktoEdit->getStatus()->getName() != 'completed'){
         
             $deleteForm = $this->createDeleteForm($task);
@@ -198,9 +210,10 @@ class TaskController extends Controller
 
                 return $this->redirectToRoute('task_show', array('id' => $task->getId()));
             }
-
+            
             return $this->render('task/edit.html.twig', array(
                 'task' => $task,
+                'user' => $user->getUsername(),
                 'edit_form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             ));
@@ -213,6 +226,7 @@ class TaskController extends Controller
             
             return $this->render('task/show.html.twig', array(
             'task' => $task,
+            'user' => $user->getUsername(),
             'comments' => $commentToTask,
             'delete_form' => $deleteForm->createView(),
             'message' => "You can't edit completed tasks!",

@@ -6,25 +6,18 @@
 
 <!-- LOGIN FORM -->
 <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">TaskPlanner by Monika Serafińska</a>
-            </div>
-            
-            <ul class="nav navbar-nav">
-                <li><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
-                <li class="active"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
-                {#<li><a href="{{ path('category_index') }}">Categories</a></li>
-                <li><a href="#">Page 3</a></li>#}
-            </ul>{#
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="{{ path('fos_user_profile_edit') }}"><span class="glyphicon glyphicon-user"></span> No loged user</a></li>
-                {#<li><a href="{{ path('fos_user_security_logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>#}
-            </ul>
-            #}
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">TaskPlanner by Monika Serafińska</a>
         </div>
-    </nav>
-<div class="col-md-2 col-md-offset-5">
+
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
+            <li class="active"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="col-md-4 col-md-offset-4">
     <div class="logo" align="center"><h3>Login</h3></div>
     <!-- Main Form -->
     <div class="login-form-1">

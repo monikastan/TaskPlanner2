@@ -1,23 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">TaskPlanner by Monika Serafińska</a>
+<div class="col-md-12">
+    <div class="row">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{{ path('task_index') }}">TaskPlanner by Monika Serafińska</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ path('task_index') }}">Tasks</a></li>
+                    <li><a href="{{ path('task_day') }}">Tasks for today</a></li>
+                    <li class="active"><a href="{{ path('category_index') }}">Categories</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ path('fos_user_profile_edit') }}"><span class="glyphicon glyphicon-user"></span> {{ user }}</a></li>
+                    <li><a href="{{ path('fos_user_security_logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                </ul>
             </div>
-            <ul class="nav navbar-nav">
-                <li><a href="{{ path('task_index') }}">Tasks</a></li>
-                <li><a href="{{ path('task_day') }}">Task for today</a></li>
-                <li class="active"><a href="{{ path('category_index') }}">Categories</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="{{ path('fos_user_profile_edit') }}"><span class="glyphicon glyphicon-user"></span> {{ user }}</a></li>
-                <li><a href="{{ path('fos_user_security_logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-            </ul>
-        </div>
-    </nav>
-    <div clas="container">
+        </nav>
+    </div>
+    
+    <div class="container-fluid">
+        <div class="row">
         <div class="col-md-6">
 
             <table class="table">
@@ -53,5 +58,7 @@
             </div>
 
         </div>
+        </div>
+    </div>
 
     {% endblock %}

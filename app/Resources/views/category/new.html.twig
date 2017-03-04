@@ -1,6 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<div class="col-md-12">
+    <div class="row">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{{ path('task_index') }}">TaskPlanner by Monika Serafińska</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ path('task_index') }}">Tasks</a></li>
+                    <li><a href="{{ path('task_day') }}">Tasks for today</a></li>
+                    <li class="active"><a href="{{ path('category_index') }}">Categories</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ path('fos_user_profile_edit') }}"><span class="glyphicon glyphicon-user"></span> {{ user }}</a></li>
+                    <li><a href="{{ path('fos_user_security_logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
     <div class="col-md-4 col-md-offset-4">
         <h1>Category creation</h1>
 
@@ -13,10 +32,11 @@
                     {{ form_end(form) }}
                 </td>
                 <td>
-                    <a href="{{ path('category_index') }}" class="btn btn-primary">Back to the list</a>
+                    <a href="{{ path('category_index') }}" class="btn btn-primary">Back to the category</a>
                 </td>
             </tr>
         </table>
 
     </div>
+</div>
 {% endblock %}

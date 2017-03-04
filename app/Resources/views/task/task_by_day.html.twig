@@ -4,11 +4,11 @@
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">TaskPlanner by Monika Serafińska</a>
+                <a class="navbar-brand" href="{{ path('task_index') }}">TaskPlanner by Monika Serafińska</a>
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="{{ path('task_index') }}">All Tasks</a></li>
-                <li class="active"><a href="{{ path('task_day') }}">Task for today</a></li>
+                <li class="active"><a href="{{ path('task_day') }}">Tasks for today</a></li>
                 <li><a href="{{ path('category_index') }}">Categories</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -17,53 +17,53 @@
             </ul>
         </div>
     </nav>
-    <div class="conteiner">
-        <div class="col-md-12">
+    
+    <div class="col-md-12">
 
-            {% if tasks != null %}
-                <table class="table">
-                    <thead>
-                        <tr>
+    {% if tasks != null %}
+        <table class="table">
+            <thead>
+                <tr>
 
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Date</th>
-                            <th>Deadline</th>
-                            <th>Priority</th>
-                            <th>Category</th>
-                            <th>Status</th>
-                            <th>Attach</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Deadline</th>
+                    <th>Priority</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Attach</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
 
-                        {% for task in tasks %}
-                            <tr>
+                {% for task in tasks %}
+                    <tr>
 
-                                <td>{{ task.name }}</td>
-                                <td>{{ task.description }}</td>
-                                <td>{% if task.date %}{{ task.date|date('Y-m-d') }}{% endif %}</td>
-                                <td>{% if task.deadline %}{{ task.deadline|date('Y-m-d') }}{% endif %}</td>
-                                <td>{{ task.priority.name }}</td>
-                                <td>{{ task.category.name }}</td>
-                                <td>{{ task.category.name }}</td>
-                                <td>{{ task.attach }}</td>
-                                <td>
-                                    <a href="{{ path('task_show', { 'id': task.id }) }}" class="btn btn-primary">show</a>
+                        <td>{{ task.name }}</td>
+                        <td>{{ task.description }}</td>
+                        <td>{% if task.date %}{{ task.date|date('Y-m-d') }}{% endif %}</td>
+                        <td>{% if task.deadline %}{{ task.deadline|date('Y-m-d') }}{% endif %}</td>
+                        <td>{{ task.priority.name }}</td>
+                        <td>{{ task.category.name }}</td>
+                        <td>{{ task.category.name }}</td>
+                        <td>{{ task.attach }}</td>
+                        <td>
+                            <a href="{{ path('task_show', { 'id': task.id }) }}" class="btn btn-primary">show</a>
 
-                                    <a href="{{ path('task_edit', { 'id': task.id }) }}" class="btn btn-primary">edit</a>
+                            <a href="{{ path('task_edit', { 'id': task.id }) }}" class="btn btn-primary">edit</a>
 
-                                </td>
-                            </tr>
-                        {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
 
-                    </tbody>
-                </table>
+            </tbody>
+        </table>
 
-            {% else %}
-                <br><br><div class="conteiner"><h4>There is no tasks for today...</h4></div>
-            {% endif %}
+    {% else %}
+        <br><br><div class="container"><h4>There is no tasks for today...</h4></div>
+    {% endif %}
 
             <div class="col-md-4">
                 <table class="table">
@@ -75,7 +75,7 @@
                 </table>
             </div>
 
-        </div>
+        
     </div>
 
 {% endblock %}
