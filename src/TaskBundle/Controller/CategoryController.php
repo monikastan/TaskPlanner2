@@ -65,6 +65,7 @@ class CategoryController extends Controller
 
         if ($form->isSubmitted() && $form->isValid() && $user instanceof User) {
             $em = $this->getDoctrine()->getManager();
+            $category->setUser($user);
             $em->persist($category);
             $em->flush($category);
 

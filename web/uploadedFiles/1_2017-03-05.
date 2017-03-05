@@ -1,0 +1,404 @@
+<?php
+
+/* 
+stworzyliśmy nowy project
+./app/console server:start
+
+otwieramy w Source Files app tu znajduje się główna baza symfony appKernel
+ * 
+ * pliki YML są niesamowicie czułe na wcięcia, nie moze być za dużo lub za mało spacji
+ * w pliku config.yml:
+ interesuje nas :
+ doctrine:
+    dbal:
+        driver:   pdo_mysql
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+ * 
+ mamy też import pików
+ * imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+ * 
+ * 
+ * otwieramy parameters:
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: symfony
+    database_user: root
+    database_password: null
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: 317ec6aec3ac15e1388ecb69af884e9834af6122
+ * 
+ zmieniam na parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: SchoolProject
+    database_user: root
+    database_password: CodersLab
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: 317ec6aec3ac15e1388ecb69af884e9834af6122
+ * 
+ tworze baze teraz ./app/console doctrine:database:create
+
+Created database `SchoolProject` for connection named default
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:database:drop
+ATTENTION: This operation should not be executed in a production environment.
+
+Would drop the database named SchoolProject.
+Please run the operation with --force to execute
+All data will be lost!
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:database:drop --force
+Dropped database for connection named `SchoolProject`
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ 
+
+parameters.ymls.dist - template pliku parameters.yml - na jego podstawie możemy tworzyć swoje pliki z parametrami
+ * 
+model - to są zazwyczaj klasy, cześć projektu 
+w doctrine modele nazywamy encjami
+ * 
+repozytorium w doctrine trzyma metody do wczytywania danych -? statyczne getAll, getOneById
+ * 
+model trzyma dane np. private $id; i metody gettery i settery
+ * 
+repozytorium jest obok MVC, nie jest częścią modelu, wcześniej wszystko trzymaliśmy w modelu -> teraz dane w czystym modelu + metody w repozytorium
+ * 
+mamy 3 encje teacher, class i student
+ * Class(classrome bo class jest zajęta ): id, nazwa, -> nie musi po niczym dziedziczyć
+ * 
+ * Teacher: id, name, staż pracy
+ * 
+ * Student: id, name, age, description
+ * 
+ * 
+ * przechodze do AppBundle i tworze katalog do encji Entity (encja) - po prostu folder tworze - nazwa jest bardzo ważna w nim php file Class
+ * 
+ * poczytać o psr
+ * 
+ * tworzymy nowego namespace w encjach zawsze, potem use z doctrine - czyli mówię zeby ta encja korzystała z doctrine + alias
+ * 
+ * dzięki adnotacji
+ * @ORM|Entity doctrine wie jaką tablice ma zrobić w DB,
+     * @ORM\Column() - mówi co będzie kolumną i jaki typ trzeba określić
+ * 
+ * 
+ * 
+ * validacja:
+ daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:schema:validate
+[Mapping]  OK - The mapping files are correct. 
+[Database] FAIL - The database schema is not in sync with the current mapping file. -> nasza baza nie jest jeszcze skonfigurowana
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ 
+ * 
+ * i tworzenie
+ * 
+ daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:schema:create
+ATTENTION: This operation should not be executed in a production environment.
+
+Creating database schema...
+Database schema created successfully!
+
+
+
+przy doctrine nie powinniśmy pisać setterów ani getterów recznie, tylko wygenerować
+ * 
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:generate:entities AppBundle/Entity/Classroom
+Generating entity "AppBundle\Entity\Classroom"
+  > backing up Classroom.php to Classroom.php~
+  > generating AppBundle\Entity\Classroom
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ 
+
+
+Doctrine nie pozwala nam zmieniać id
+ * 
+ * kiedy tworymy schema nie musimy podawać namespace bo Doctrine przejdzie po wszystkich plikach,
+ * napomiast przy generowaniu setterów i getterów nie chciałem we wszystkich plikach ich tworzyć
+ * 
+ * entity - tworzy encje
+ * entities - tworzy settwry i gettery
+ * generator encji dodaje id automatycznie
+ * 
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:generate:entity
+
+                                             
+  Welcome to the Doctrine2 entity generator  
+                                             
+
+
+This command helps you generate Doctrine2 entities.
+
+First, you need to give the entity name you want to generate.
+You must use the shortcut notation like AcmeBlogBundle:Post.
+
+The Entity shortcut name: AppBundle:Teacher
+
+Determine the format to use for the mapping information.
+
+Configuration format (yml, xml, php, or annotation) [annotation]: 
+
+Instead of starting with a blank entity, you can add some fields now.
+Note that the primary key will be added automatically (named id).
+
+Available types: array, simple_array, json_array, object, 
+boolean, integer, smallint, bigint, string, text, datetime, datetimetz, 
+date, time, decimal, float, binary, blob, guid.
+
+New field name (press <return> to stop adding fields): name
+Field type [string]: 
+Field length [255]: 
+Is nullable [false]: 
+Unique [false]: 
+
+New field name (press <return> to stop adding fields): experiance
+Field type [string]: float
+Is nullable [false]: false
+Unique [false]: false
+
+New field name (press <return> to stop adding fields): 
+
+                     
+  Entity generation  
+                     
+
+  created ./src/AppBundle/Entity/Teacher.php
+> Generating entity class src/AppBundle/Entity/Teacher.php: OK!
+> Generating repository class src/AppBundle/Repository/TeacherRepository.php: OK!
+
+                                         
+  Everything is OK! Now get to work :).  
+                                         
+
+
+Generowanie ucznia Pupil:
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:generate:entity
+
+                                             
+  Welcome to the Doctrine2 entity generator  
+                                             
+
+
+This command helps you generate Doctrine2 entities.
+
+First, you need to give the entity name you want to generate.
+You must use the shortcut notation like AcmeBlogBundle:Post.
+
+The Entity shortcut name: AppBundle:Pupil
+
+Determine the format to use for the mapping information.
+
+Configuration format (yml, xml, php, or annotation) [annotation]: 
+
+Instead of starting with a blank entity, you can add some fields now.
+Note that the primary key will be added automatically (named id).
+
+Available types: array, simple_array, json_array, object, 
+boolean, integer, smallint, bigint, string, text, datetime, datetimetz, 
+date, time, decimal, float, binary, blob, guid.
+
+New field name (press <return> to stop adding fields): name
+Field type [string]: 
+Field length [255]: 
+Is nullable [false]: 
+Unique [false]: 
+
+New field name (press <return> to stop adding fields): age
+Field type [string]: integer
+Is nullable [false]: 
+Unique [false]: 
+
+New field name (press <return> to stop adding fields): description
+Field type [string]: 
+Field length [255]: 
+Is nullable [false]: 
+Unique [false]: 
+
+New field name (press <return> to stop adding fields): 
+
+                     
+  Entity generation  
+                     
+
+  created ./src/AppBundle/Entity/Pupil.php
+> Generating entity class src/AppBundle/Entity/Pupil.php: OK!
+> Generating repository class src/AppBundle/Repository/PupilRepository.php: OK!
+
+                                         
+  Everything is OK! Now get to work :).  
+                                         
+walidacja:
+ * daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:schema:validate
+[Mapping]  OK - The mapping files are correct.
+[Database] FAIL - The database schema is not in sync with the current mapping file.
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ 
+"nasze pliki są ok ale różnią się od tego co mamy w bazie danych"
+ * 
+ update:
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:schema:update
+ATTENTION: This operation should not be executed in a production environment.
+           Use the incremental update to detect changes during development and use
+           the SQL DDL provided to manually update your database in production.
+
+The Schema-Tool would execute "2" queries to update the database.
+Please run the operation by passing one - or both - of the following options:
+    doctrine:schema:update --force to execute the command
+    doctrine:schema:update --dump-sql to dump the SQL statements to the screen
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console doctrine:schema:update --force
+Updating database schema...
+Database schema updated successfully! "2" queries were executed
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ 
+
+ćwiczenia A1-B1:
+1) tworzyy projekt
+ * 2)tworzymy bundle
+ * 3)usuwamy bundel (app/AppKernal.php config/routing.yml + folder AppBundle)
+ * 4) tworzenie kontrolera ./app/console generate:controller 
+ * 5) zmieniam nazwe bazy + hasło w app/config/parameters.yml
+ * 6) tworze DB:
+ * ./app/console doctrine:database:create  
+ * 7)generuję entity(encję):
+ * ./app/console doctrine:generate:entity 
+ * 8) wczytuję schemat (encję)
+ * ./app/console doctrine:schema:create 
+ * 
+ 
+ teraz wracamy do projectu i tworzymy controller
+ * daniel@daniel-K75VJ:~/Workspace/SchoolProject$ ./app/console generate:controller
+
+                                               
+  Welcome to the Symfony controller generator  
+                                               
+
+
+Every page, and even sections of a page, are rendered by a controller.
+This command helps you generate them easily.
+
+First, you need to give the controller name you want to generate.
+You must use the shortcut notation like AcmeBlogBundle:Post
+
+Controller name: AppBundle:Classroom
+
+Determine the format to use for the routing.
+
+Routing format (php, xml, yml, annotation) [annotation]: 
+
+Determine the format to use for templating.
+
+Template format (twig, php) [twig]: 
+
+Instead of starting with a blank controller, you can add some actions now. An action
+is a PHP function or method that executes, for example, when a given route is matched.
+Actions should be suffixed by Action.
+
+
+New action name (press <return> to stop adding actions): 
+
+                             
+  Summary before generation  
+                             
+
+You are going to generate a "AppBundle:Classroom" controller
+using the "annotation" format for the routing and the "twig" format
+for templating
+Do you confirm generation [yes]? 
+
+                         
+  Controller generation  
+                         
+
+  created ./src/AppBundle/Controller/ClassroomController.php
+  created ./src/AppBundle/Tests/Controller/ClassroomControllerTest.php
+Generating the bundle code: OK
+
+                                         
+  Everything is OK! Now get to work :).  
+                                         
+
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ 
+
+chcepy napisać API REStowe -> dostanie dane Jsonem i odda dane jsonem
+ * 
+ * zaimplementujemy stworzenie nowej klasy, musimy obsłużyć wysłanie postem danych na /class
+ * pracujemy w pliku ClassroomController
+ * 
+ daniel@daniel-K75VJ:~/Workspace/SchoolProject$ curl
+curl: try 'curl --help' or 'curl --manual' for more information
+daniel@daniel-K75VJ:~/Workspace/SchoolProject$ 
+
+curl - > program, który symuluje przeglądarkę, jest w każdym linuxie i macu ale w windowsie nie
+
+curl --help
+ *  -X, --request COMMAND  Specify request command to use -> przesyłanie danych
+     --resolve HOST:PORT:ADDRESS  Force resolve of HOST:PORT to ADDRESS
+     --retry NUM   Retry request NUM times if transient problems occur
+     --retry-delay SECONDS When retrying, wait this many seconds between each
+     --retry-max-time SECONDS  Retry only within this period
+     --sasl-ir       Enable initial response in SASL authentication
+
+-d - pozwala wstawić dane post'u
+ * 
+ * daniel@daniel-K75VJ:~/Workspace/SchoolProject$ curl -X GET http://localhost:8000 -> wyświetli odpowiedz od serwera i wyświtli w konsoli
+ * 
+ * curl -X GET http://localhost:8000/class zwróci: Hello World -> nie zwróci nic przesłanego metodą GET
+ * 
+ * curl -X POST http://localhost:8000/class zwróci: Hello World
+ * Hello Worlddaniel@daniel-K75VJ:~/Workspace/SchoolProject$ 
+
+ byłło:
+    public function createNewClassroomAction(Request $req) {
+//        $postData = $req->request->all(); //zwraca tablice
+//        var_dump($postData);
+        //żeby włożyć ten obiekt do bazy danych musimmy mieć EntityManager slajd 33
+
+        $em = $this->getDoctrine()->getManager(); //nasz manager siedzi w zmiennej $em
+
+        $newClassroom = new Classroom();
+        $newClassroom->setName("3B");
+
+        $em->persist($newClassroom); //powiadamiam managera o istnieniu naszej encji
+        $em->flush(); //entity manager patrzy co siedzi w bazie danych jakie ma encje i porównuje to -> kurde pogubiłem sie doczytać w necie
+        //flush'a używamy tylko 1 raz na koniec
+
+        return new Response("Nowa klasa o id {$newClassroom->getId()}"
+                . "została utworzona");
+        /*
+         * teraz po wklepaniu w konsoli curl -X POST http://localhost:8000/class za każdym razem dodaje mi wpis do bazy danych
+          </pre>Hello Worlddaniel@daniel-K75VJ:~/Workspace/SchoolProject$ curl -X POST http://localhost:8000/class
+          Nowa klasa o id 1została utworzonadaniel@daniel-K75VJ:~/Workspace/SchoolProject$ curl -X POST http://localhost:8000/class
+          Nowa klasa o id 2została utworzonadaniel@daniel-K75VJ:~/Workspace/SchoolProject$ curl -X POST http://localhost:8000/class
+          Nowa klasa o id 3została utworzonadaniel@daniel-K75VJ:~/Workspace/SchoolProject$ curl -X POST http://localhost:8000/class
+          Nowa klasa o id 4została utworzonadaniel@daniel-K75VJ:~/Workspace/SchoolProject$
+ * 
+modyfikujemy
+ * 
+
+
+
+tak żeby to był api to nie zwracamy response tylko jsona
+ * slajd 37 - te funkcje findOneById -> PHP tworzy w locie -> nigdy nie będą występowały w podpowiedzi środowiska np NetBeansa
+ * 
+ * model/encja = klasa
+ * obiekt encji = jeden obiekt
+ * 
+ * 
+ * 
+ * entity manager zarządza encjami w naszym projekcie
+ * 
+         */
+    
+
+
+
+
+
+

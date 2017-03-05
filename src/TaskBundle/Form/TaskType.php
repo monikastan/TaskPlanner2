@@ -8,7 +8,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class TaskType extends AbstractType
 {
@@ -31,7 +32,7 @@ class TaskType extends AbstractType
                         'data-date-format' => 'dd-mm-yyyy'
                         )
                     ))
-                ->add('attach', FileType::class, array('label' => 'Attachement', 'required' => false
+                ->add('attach', FileType::class, array('label' => 'Attachement', 'required' => false, 'data_class' => null
                         ))
                 ->add('priority', 'entity', array(
                     'class' => 'TaskBundle:Priority',
@@ -43,6 +44,11 @@ class TaskType extends AbstractType
                 ))
                 ->add('category', 'entity', array(
                     'class' => 'TaskBundle:Category',
+                    'query_builder' => function (EntityRepository $er) use ($options) {
+                        return $er->createQueryBuilder('c')
+                            ->where('c.user = :userId')
+                            ->setParameter('userId', $options['attr']['userId']);
+    },
                     'choice_label' => 'name'
                 ));
     }

@@ -114,15 +114,16 @@ class TaskController extends Controller
      */
     public function newAction(Request $request)
     {
-        $task = new Task();
-        $form = $this->createForm('TaskBundle\Form\TaskType', $task);
-        $form->handleRequest($request);
-        
         $user = $this->container
                 ->get('security.context')
                 ->getToken()
                 ->getUser();
-
+        
+        $task = new Task();
+        $form = $this->createForm('TaskBundle\Form\TaskType', $task, ['attr' => ['userId' => $user->getId()]]);//przekazuję Id usera, zeby w formularzu edycji widzieć tylko kategorie danego usera););
+        $form->handleRequest($request);
+        
+        
         if ($form->isSubmitted() && $form->isValid() && $user instanceof User) {
             $em = $this->getDoctrine()->getManager();
             $date = new \DateTime();
@@ -202,10 +203,20 @@ class TaskController extends Controller
         if($tasktoEdit->getStatus()->getName() != 'completed'){
         
             $deleteForm = $this->createDeleteForm($task);
-            $editForm = $this->createForm('TaskBundle\Form\TaskType', $task);
-            $editForm->handleRequest($request);
+            $editForm = $this->createForm('TaskBundle\Form\TaskType', $task, ['attr' => ['userId' => $user->getId()]]);//przekazuję Id usera, zeby w formularzu edycji widzieć tylko kategorie danego usera);
+            $attachment = $task->getAttach();
+            $editForm->handleRequest($request); //w tym miejscu tracę stary załącznik, dlatego przechwutyję go do zmiennej attachment
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
+                
+                if($task->getAttach() != null) {
+                    $file = $task->getAttach();
+                    $fileName = $user->getId().'_'.date('Y-m-d').'.'.$file->guessExtension();//znajduje rozszerzenie dołączanego pliku
+                    $file->move($this->getParameter('uploadedFiles'), $fileName);
+                    $task->setAttach($fileName);
+                } else {
+                    $task->setAttach($attachment);
+                }
                 $this->getDoctrine()->getManager()->flush();
 
                 return $this->redirectToRoute('task_show', array('id' => $task->getId()));
