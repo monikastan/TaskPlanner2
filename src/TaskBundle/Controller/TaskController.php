@@ -129,9 +129,12 @@ class TaskController extends Controller
             $date = new \DateTime();
             $task->setDate($date);
             $file = $task->getAttach();
-            $fileName = $user->getId().'_'.date('Y-m-d').'.'.$file->guessExtension();//znajduje rozszerzenie dołączanego pliku
-            $file->move($this->getParameter('uploadedFiles'), $fileName);
-            $task->setAttach($fileName);
+          
+            if($file != null) {
+                $fileName = $user->getId().'_'.date('Y-m-d').'.'.$file->guessExtension();//znajduje rozszerzenie dołączanego pliku
+                $file->move($this->getParameter('uploadedFiles'), $fileName);
+                $task->setAttach($fileName);
+            }
             $task->setUser($user);
             $em->persist($task);
             $em->flush($task);

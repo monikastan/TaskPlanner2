@@ -48,7 +48,13 @@
                         <td>{{ task.priority.name }}</td>
                         <td>{{ task.category.name }}</td>
                         <td>{{ task.category.name }}</td>
-                        <td>{{ task.attach }}</td>
+                        <td>{% if task.attach is not null %}
+                                <a href="/uploadedFiles/{{ task.attach }}">File</a>
+
+                            {% else %}
+                                No file attached...
+                            {% endif %}
+                        </td>
                         <td>
                             <a href="{{ path('task_show', { 'id': task.id }) }}" class="btn btn-primary">show</a>
 
