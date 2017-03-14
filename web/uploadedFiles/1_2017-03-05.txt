@@ -1,5 +1,0 @@
-przenies folder nbproject - obok (poza project Twitter)
-następnie: git rm nbproject
-potem:commit
-potem:dodac nazwe folderu do gitignore
-potem: przeniesc ponownie w to samo miejsce
